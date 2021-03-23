@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
-    const flagsLeft = document.querySelector('#flags-left')
-    const result = document.querySelector('#result')
+    const flagsLeft = document.querySelector('#flags-left');
+    const result = document.querySelector('#result');
+    const restart = document.querySelector('.restart');
     let width = 10;
     let flags = 0;
     let bombAmount = 20;
@@ -59,9 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createBoard();
 
+    restart!.addEventListener('click', function(e) {
+        restartBoard();
+    });
+
     function addFlag(square: HTMLDivElement) {
         if (isGameOver) return;
-        if (square.classList.contains('checked') || flags >= bombAmount) return;
+        if (square.classList.contains('checked')) return;
+        if (flags >= bombAmount && !square.classList.contains('flag')) return;
 
         if (!square.classList.contains('flag')) {
             square.classList.add('flag');
@@ -164,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkForWin() {
-        let matches = 0
+        let matches = 0;
         for (let i = 0; i < squares.length; i++) {
             if (squares[i].classList.contains('flag') && squares[i].classList.contains('bomb')) {
                 matches++;
@@ -175,5 +181,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
         }
+    }
+
+    function restartBoard() {
+        result!.innerHTML = '';
+        isGameOver = false;
+        squares = [];
+        flags = 0;
+
+        while (grid!.firstChild) {
+            grid!.removeChild(grid!.firstChild);
+        }
+
+        createBoard();
     }
 });
