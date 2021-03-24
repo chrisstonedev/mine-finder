@@ -21,7 +21,7 @@ div {
     font-family: 'Roboto Mono', monospace;
 }
 
-.valid, .checked, .bomb {
+.valid, .checked, .mine {
     height: 40px;
     width: 40px;
     box-sizing: border-box;
@@ -38,7 +38,7 @@ div {
     border-color: #9c998d;
 }
 
-.bomb {
+.mine {
     border: 5px solid;
     border-color: #f5f3eb #bab7a9 #bab7a9 #fff9db;
 }
