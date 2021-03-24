@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else {
             checkSquare(square, +currentId);
         }
+        checkForWin();
     }
     function checkSquare(square, currentId) {
         const isLeftEdge = currentId % width === 0;
@@ -166,29 +167,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 10);
     }
-    function gameOver(square) {
+    function gameOver(losingSquare) {
         result.innerHTML = 'BOOM! Game Over!';
         isGameOver = true;
+        losingSquare.innerHTML = '💥';
         // Show all the bombs.
         squares.forEach(square => {
-            if (square.classList.contains('bomb')) {
+            if (square.classList.contains('bomb') && square !== losingSquare && !square.classList.contains('flag')) {
                 square.innerHTML = '💣';
                 square.classList.remove('bomb');
                 square.classList.add('checked');
             }
+            else if (!square.classList.contains('bomb') && square.classList.contains('flag')) {
+                square.innerHTML = '❌';
+            }
         });
     }
     function checkForWin() {
-        let matches = 0;
+        let flagMatches = 0;
+        let clickedSquares = 0;
         for (let i = 0; i < squares.length; i++) {
             if (squares[i].classList.contains('flag') && squares[i].classList.contains('bomb')) {
-                matches++;
+                flagMatches++;
             }
-            if (matches === bombAmount) {
-                result.innerHTML = 'YOU WIN!';
-                isGameOver = true;
-                return;
+            else if (squares[i].classList.contains('checked')) {
+                clickedSquares++;
             }
+        }
+        console.log('flagMatches=' + flagMatches.toString() + ',clickedSquares=' + clickedSquares.toString());
+        if (flagMatches === bombAmount || clickedSquares === width * width - bombAmount) {
+            flagsLeft.innerHTML = '0';
+            result.innerHTML = 'YOU WIN!';
+            isGameOver = true;
+            squares.forEach(square => {
+                if (square.classList.contains('bomb') && !square.classList.contains('flag')) {
+                    square.innerHTML = '🚩';
+                }
+                else if (!square.classList.contains('bomb') && !square.classList.contains('checked')) {
+                    square.classList.add('checked');
+                }
+            });
+            return;
         }
     }
     function restartBoard() {
