@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             squares.push(square);
 
             square.addEventListener('click', function(e) {
-                clickSquare(square);
+                userClickedSquare(square);
             });
 
             square.oncontextmenu = function(e) {
@@ -83,10 +83,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function userClickedSquare(square: HTMLElement) {
+        let currentId = square.id;
+        if (isGameOver || square.classList.contains('flag')) return;
+        if (square.classList.contains('checked')) {
+            const total = Number(square.getAttribute('data'));
+            if (total > 0) {
+                const flagCount = getFlagCount(+currentId);
+                if (total === flagCount) {
+                    checkSquare(square, +currentId);
+                }
+            }
+            return;
+        }
+
+        clickSquare(square);
+    }
+
     function clickSquare(square: HTMLElement) {
         let currentId = square.id;
-        if (isGameOver) return;
-        if (square.classList.contains('checked') || square.classList.contains('flag')) return;
+        if (isGameOver || square.classList.contains('flag') || square.classList.contains('checked')) return;
 
         if (square.classList.contains('bomb')) {
             gameOver(square);
@@ -210,5 +226,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         createBoard();
+    }
+
+    function getFlagCount(currentId: number): number {
+        const isLeftEdge = currentId % width === 0;
+        const isRightEdge = currentId % width === width - 1;
+        const isTopEdge = currentId < width;
+        const isBottomEdge = currentId >= width * width - width;
+        let flagCount = 0;
+
+        if (!isLeftEdge) {
+            const newId = squares[currentId - 1].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+        if (!isLeftEdge && !isTopEdge) {
+            const newId = squares[currentId - 1 - width].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+        if (!isTopEdge) {
+            const newId = squares[currentId - width].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+        if (!isTopEdge && !isRightEdge) {
+            const newId = squares[currentId + 1 - width].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+        if (!isRightEdge) {
+            const newId = squares[currentId + 1].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+        if (!isRightEdge && !isBottomEdge) {
+            const newId = squares[currentId + 1 + width].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+        if (!isBottomEdge) {
+            const newId = squares[currentId + width].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+        if (!isBottomEdge && !isLeftEdge) {
+            const newId = squares[currentId - 1 + width].id;
+            const newSquare = document.getElementById(newId);
+            if (newSquare?.classList.contains('flag')) flagCount++;
+        }
+
+        return flagCount;
     }
 });
