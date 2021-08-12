@@ -1,6 +1,6 @@
 # Minesweeper
 
-This is my personal portfolio website, built using Angular and TypeScript. I write code in Visual Studio Code and test and build using the Angular CLI. The latest revision as built can be found at [chrisstone.dev](https://chrisstone.dev/).
+This is a Minesweeper clone written in TypeScript that can be played on the web as well as built for the desktop using Electron.
 
 ## Development
 
