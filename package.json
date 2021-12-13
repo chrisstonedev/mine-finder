@@ -1,16 +1,19 @@
 {
-  "name": "minesweeper",
+  "name": "mine-finder",
   "version": "1.0.0",
   "description": "",
-  "main": "build/main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "tsc && electron .",
+    "start": "npm run build && electron .",
+    "build": "tsc && npm run copy",
+    "copy": "copyfiles -u 1 \"./src/**/*.{css,html}\" \"./dist/\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^12.0.2",
-    "typescript": "^4.2.3"
+    "copyfiles": "^2.4.1",
+    "electron": "^16.0.4",
+    "typescript": "^4.5.3"
   }
 }

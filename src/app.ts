@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
       grid!.appendChild(square);
       squares.push(square);
 
-      square.addEventListener('click', function (e) {
+      square.addEventListener('click', () => {
         userClickedSquare(square);
       });
 
-      square.oncontextmenu = function (e) {
+      square.oncontextmenu = function(e) {
         e.preventDefault();
         addFlag(square);
       };
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   createBoard();
 
-  restart!.addEventListener('click', function (e) {
+  restart!.addEventListener('click', () => {
     restartBoard();
   });
 
